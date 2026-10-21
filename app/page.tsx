@@ -1,18 +1,46 @@
 import { getPublishedPublicationsGroupedByType } from '@/lib/publications/queries';
 import { ORDERED_CONTENT_TYPES } from '@/lib/publications/types';
 import { PublicationItem } from '@/components/publications/PublicationItem';
+import { getBaseUrl, SITE_CONFIG } from '@/lib/seo/config';
 
 export const instant = false;
 
 export default async function Home() {
   const { data: groupedPublications, error } = await getPublishedPublicationsGroupedByType();
+  const baseUrl = getBaseUrl();
 
   const totalCount = groupedPublications
     ? Object.values(groupedPublications).reduce((acc, list) => acc + list.length, 0)
     : 0;
 
+  const websiteStructuredData = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebSite',
+        '@id': `${baseUrl}/#website`,
+        url: baseUrl,
+        name: SITE_CONFIG.name,
+        description: SITE_CONFIG.description,
+        publisher: {
+          '@id': `${baseUrl}/#author`,
+        },
+      },
+      {
+        '@type': 'Person',
+        '@id': `${baseUrl}/#author`,
+        name: SITE_CONFIG.author,
+        url: baseUrl,
+      },
+    ],
+  };
+
   return (
     <main className="max-w-[580px] w-full mx-auto px-4 sm:px-6 md:px-0 py-6">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteStructuredData) }}
+      />
       {/* Header / Masthead */}
       <header className="mb-6 sm:mb-8">
         <h1 className="text-2xl sm:text-3xl font-semibold text-primary tracking-normal">

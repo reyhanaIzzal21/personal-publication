@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { getPublishedPublicationBySlug } from '@/lib/publications/queries';
 import { PublicationDetailLayout } from '@/components/publications/PublicationDetailLayout';
+import { extractCleanDescription, getBaseUrl, SITE_CONFIG } from '@/lib/seo/config';
 
 export const instant = false;
 
@@ -16,13 +17,45 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!publication) {
     return {
-      title: 'Publication Not Found — Reyhana Izzal',
+      title: 'Publication Not Found',
+      robots: {
+        index: false,
+        follow: false,
+      },
     };
   }
 
+  const rawDescription =
+    publication.subtitle ||
+    publication.introParagraphs?.[0] ||
+    publication.sections?.[0]?.paragraphs?.[0] ||
+    `${publication.contentType} on ${publication.subject} by ${SITE_CONFIG.author}`;
+
+  const description = extractCleanDescription(rawDescription, 160);
+  const canonicalUrl = `/publications/${publication.slug}`;
+
   return {
-    title: `${publication.title} — Reyhana Izzal`,
-    description: publication.subtitle || undefined,
+    title: publication.title,
+    description: description || undefined,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title: publication.title,
+      description: description || undefined,
+      url: canonicalUrl,
+      siteName: SITE_CONFIG.name,
+      type: 'article',
+      publishedTime: publication.publishedAt,
+      authors: [SITE_CONFIG.author],
+      section: publication.subject,
+      tags: [publication.contentType, publication.subject],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: publication.title,
+      description: description || undefined,
+    },
   };
 }
 
@@ -34,7 +67,47 @@ async function PublicationContent({ params }: PageProps) {
     notFound();
   }
 
-  return <PublicationDetailLayout publication={publication} />;
+  const baseUrl = getBaseUrl();
+  const rawDescription =
+    publication.subtitle ||
+    publication.introParagraphs?.[0] ||
+    publication.sections?.[0]?.paragraphs?.[0] ||
+    `${publication.contentType} by ${SITE_CONFIG.author}`;
+  const description = extractCleanDescription(rawDescription, 160);
+
+  const articleJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: publication.title,
+    description: description || undefined,
+    datePublished: publication.publishedAt,
+    dateModified: publication.publishedAt,
+    author: {
+      '@type': 'Person',
+      name: SITE_CONFIG.author,
+      url: baseUrl,
+    },
+    publisher: {
+      '@type': 'Person',
+      name: SITE_CONFIG.author,
+      url: baseUrl,
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `${baseUrl}/publications/${publication.slug}`,
+    },
+    image: `${baseUrl}/publications/${publication.slug}/opengraph-image`,
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+      <PublicationDetailLayout publication={publication} />
+    </>
+  );
 }
 
 export default function PublicationDetailPage({ params }: PageProps) {
