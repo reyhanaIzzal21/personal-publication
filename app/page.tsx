@@ -1,8 +1,15 @@
-import { getPublicationsGroupedByType, ORDERED_CONTENT_TYPES } from '@/lib/mock-publications';
+import { getPublishedPublicationsGroupedByType } from '@/lib/publications/queries';
+import { ORDERED_CONTENT_TYPES } from '@/lib/publications/types';
 import { PublicationItem } from '@/components/publications/PublicationItem';
 
-export default function Home() {
-  const groupedPublications = getPublicationsGroupedByType();
+export const instant = false;
+
+export default async function Home() {
+  const { data: groupedPublications, error } = await getPublishedPublicationsGroupedByType();
+
+  const totalCount = groupedPublications
+    ? Object.values(groupedPublications).reduce((acc, list) => acc + list.length, 0)
+    : 0;
 
   return (
     <main className="max-w-[580px] w-full mx-auto px-4 sm:px-6 md:px-0 py-6">
@@ -35,26 +42,36 @@ export default function Home() {
         </p>
       </section>
 
-      {/* Publications Listing by Content Type */}
-      <section className="space-y-10 sm:space-y-11">
-        {ORDERED_CONTENT_TYPES.map((type) => {
-          const pubs = groupedPublications[type] || [];
-          if (pubs.length === 0) return null;
+      {/* Publications Listing by Content Type / Error / Empty State */}
+      {error ? (
+        <section className="border-t border-border pt-6 font-serif text-[15px] text-secondary">
+          <p>Unable to load publications at this time. Please check back shortly.</p>
+        </section>
+      ) : totalCount === 0 ? (
+        <section className="border-t border-border pt-6 font-serif text-[15px] text-secondary">
+          <p>No publications published yet.</p>
+        </section>
+      ) : (
+        <section className="space-y-10 sm:space-y-11">
+          {ORDERED_CONTENT_TYPES.map((type) => {
+            const pubs = groupedPublications?.[type] || [];
+            if (pubs.length === 0) return null;
 
-          return (
-            <div key={type}>
-              <h2 className="text-[22px] sm:text-[24px] font-semibold text-primary mb-3.5">
-                {type}
-              </h2>
-              <div>
-                {pubs.map((pub) => (
-                  <PublicationItem key={pub.id} publication={pub} />
-                ))}
+            return (
+              <div key={type}>
+                <h2 className="text-[22px] sm:text-[24px] font-semibold text-primary mb-3.5">
+                  {type}
+                </h2>
+                <div>
+                  {pubs.map((pub) => (
+                    <PublicationItem key={pub.id} publication={pub} />
+                  ))}
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </section>
+            );
+          })}
+        </section>
+      )}
     </main>
   );
 }

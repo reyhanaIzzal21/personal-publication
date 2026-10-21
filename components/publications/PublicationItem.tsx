@@ -1,8 +1,8 @@
 import Link from 'next/link';
-import type { Publication } from '@/lib/mock-publications';
+import type { PublicationSummary } from '@/lib/publications/types';
 
 interface PublicationItemProps {
-  publication: Publication;
+  publication: PublicationSummary;
 }
 
 export function PublicationItem({ publication }: PublicationItemProps) {

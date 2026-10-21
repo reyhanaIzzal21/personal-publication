@@ -2,12 +2,12 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
-import type { Publication } from '@/lib/mock-publications';
+import type { PublicationDetail } from '@/lib/publications/types';
 import { TableOfContents, type TocItem } from '@/components/navigation/TableOfContents';
 import { PdfAttachmentBox } from '@/components/publications/PdfAttachmentBox';
 
 interface PublicationDetailLayoutProps {
-  publication: Publication;
+  publication: PublicationDetail;
 }
 
 // Minimal Icons
@@ -55,10 +55,10 @@ export function PublicationDetailLayout({ publication }: PublicationDetailLayout
   // Extract TOC items from article sections
   const tocItems: TocItem[] = useMemo(() => {
     const items: TocItem[] = [];
-    if (publication.introParagraphs && publication.introParagraphs.length > 0) {
-      items.push({ id: 'introduction', title: 'Introduction' });
-    }
-    if (publication.sections) {
+    if (publication.sections && publication.sections.length > 0) {
+      if (publication.introParagraphs && publication.introParagraphs.some((p) => p && p.trim().length > 0)) {
+        items.push({ id: 'introduction', title: 'Introduction' });
+      }
       for (const section of publication.sections) {
         items.push({ id: section.id, title: section.title });
       }
@@ -258,23 +258,34 @@ export function PublicationDetailLayout({ publication }: PublicationDetailLayout
         )}
 
         {/* Article Body */}
-        <article className="text-text font-serif">
-          {/* Introduction Section */}
-          {publication.introParagraphs && publication.introParagraphs.length > 0 && (
-            <div id="introduction" className="scroll-mt-16 space-y-4 mb-10 text-[16px] sm:text-[17px] leading-[1.65]">
-              {publication.introParagraphs.map((para, index) => (
-                <p key={index}>{para}</p>
-              ))}
-            </div>
-          )}
+        <article className="text-text font-serif pub-content">
+          {/* Introduction Section — handles rich HTML and plain-text fallbacks */}
+          {publication.introParagraphs &&
+            publication.introParagraphs.some((p) => p && p.trim().length > 0) && (
+              <div
+                id="introduction"
+                className="pub-content scroll-mt-16 mb-10 text-[16px] sm:text-[17px] leading-[1.65]"
+                dangerouslySetInnerHTML={{
+                  __html: publication.introParagraphs
+                    .filter((p) => {
+                      if (!p || !p.trim()) return false;
+                      // Skip semantically empty blocks like <p></p> or <p>&nbsp;</p>
+                      const stripped = p.trim().replace(/<[^>]+>/g, '').replace(/&nbsp;/g, '').trim();
+                      return stripped.length > 0 || /^<(ul|ol|blockquote|pre|hr)/.test(p.trim());
+                    })
+                    .map((p) => (p.trim().startsWith('<') ? p : `<p>${p}</p>`))
+                    .join(''),
+                }}
+              />
+            )}
 
           {/* Formatted Article Sections */}
           {publication.sections && publication.sections.length > 0 && (
             <div className="space-y-10">
               {publication.sections.map((section) => (
                 <section key={section.id} id={section.id} className="scroll-mt-16">
-                  {/* Section Title */}
-                  <h2 className="text-[20px] sm:text-[22px] font-semibold text-primary mb-2 font-serif leading-snug">
+                  {/* Section Title (H2) */}
+                  <h2 className="text-[20px] sm:text-[22px] font-semibold text-primary mb-3 font-serif leading-snug">
                     {section.title}
                   </h2>
 
@@ -285,21 +296,28 @@ export function PublicationDetailLayout({ publication }: PublicationDetailLayout
                     </p>
                   )}
 
-                  {/* Section Paragraphs */}
-                  <div className="space-y-4 text-[16px] sm:text-[17px] leading-[1.65]">
-                    {section.paragraphs.map((p, pIdx) => (
-                      <p key={pIdx}>{p}</p>
-                    ))}
-                  </div>
+                  {/* Section Body — prefer rich HTML, fall back to plain paragraphs */}
+                  {section.htmlContent ? (
+                    <div
+                      className="pub-content text-[16px] sm:text-[17px] leading-[1.65]"
+                      dangerouslySetInnerHTML={{ __html: section.htmlContent }}
+                    />
+                  ) : (
+                    <div className="pub-content space-y-4 text-[16px] sm:text-[17px] leading-[1.65]">
+                      {section.paragraphs.map((p, pIdx) => (
+                        <p key={pIdx}>{p}</p>
+                      ))}
+                    </div>
+                  )}
                 </section>
               ))}
             </div>
           )}
 
-          {/* Fallback ContentHtml (if sections not specified) */}
+          {/* Fallback: raw contentHtml when no sections are present */}
           {(!publication.sections || publication.sections.length === 0) && publication.contentHtml && (
             <div
-              className="space-y-4 text-[16px] sm:text-[17px] leading-[1.65]"
+              className="pub-content text-[16px] sm:text-[17px] leading-[1.65]"
               dangerouslySetInnerHTML={{ __html: publication.contentHtml }}
             />
           )}

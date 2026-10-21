@@ -158,3 +158,204 @@ hr,
   border-top: 1px solid var(--border);
   margin: 2rem 0;
 }
+
+/* =========================================================================
+   EDITORIAL CONTENT & TIPTAP EDITOR SHARED STYLES
+   Ensures 100% visual and structural fidelity between editor and public pages
+   ========================================================================= */
+
+.tiptap-editor,
+.pub-content {
+  font-family: var(--font-serif);
+  color: var(--text);
+  line-height: 1.7;
+}
+
+.tiptap-editor.ProseMirror:focus {
+  outline: none;
+}
+
+/* Headings */
+.tiptap-editor h2,
+.pub-content h2 {
+  font-family: var(--font-serif);
+  font-size: 1.375rem; /* 22px */
+  font-weight: 600;
+  color: var(--primary);
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+}
+
+@media (min-width: 640px) {
+  .tiptap-editor h2,
+  .pub-content h2 {
+    font-size: 1.5rem; /* 24px */
+  }
+}
+
+.tiptap-editor h3,
+.pub-content h3 {
+  font-family: var(--font-serif);
+  font-size: 1.125rem; /* 18px */
+  font-weight: 600;
+  color: var(--primary);
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.tiptap-editor > *:first-child,
+.pub-content > *:first-child {
+  margin-top: 0 !important;
+}
+
+/* Paragraphs */
+.tiptap-editor p,
+.pub-content p {
+  margin-bottom: 1rem;
+  line-height: 1.7;
+}
+
+.tiptap-editor p:last-child,
+.pub-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Bullet Lists (Unordered) */
+.tiptap-editor ul,
+.pub-content ul {
+  list-style-type: disc !important;
+  margin-left: 1.5rem !important;
+  margin-top: 0.75rem !important;
+  margin-bottom: 1rem !important;
+  padding-left: 0.5rem !important;
+}
+
+.tiptap-editor ul ul,
+.pub-content ul ul {
+  list-style-type: circle !important;
+  margin-top: 0.25rem !important;
+  margin-bottom: 0.25rem !important;
+  margin-left: 1.25rem !important;
+}
+
+/* Ordered Lists (Numbered) */
+.tiptap-editor ol,
+.pub-content ol {
+  list-style-type: decimal !important;
+  margin-left: 1.5rem !important;
+  margin-top: 0.75rem !important;
+  margin-bottom: 1rem !important;
+  padding-left: 0.5rem !important;
+}
+
+.tiptap-editor ol ol,
+.pub-content ol ol {
+  list-style-type: lower-alpha !important;
+  margin-top: 0.25rem !important;
+  margin-bottom: 0.25rem !important;
+  margin-left: 1.25rem !important;
+}
+
+/* List Items */
+.tiptap-editor li,
+.pub-content li {
+  display: list-item !important;
+  margin-bottom: 0.35rem;
+  line-height: 1.65;
+  padding-left: 0.25rem;
+}
+
+.tiptap-editor li > p,
+.pub-content li > p {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  display: inline;
+}
+
+/* Blockquotes */
+.tiptap-editor blockquote,
+.pub-content blockquote {
+  border-left: 2px solid var(--border);
+  padding-left: 1.25rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+  color: var(--secondary);
+}
+
+.tiptap-editor blockquote p,
+.pub-content blockquote p {
+  font-style: italic;
+  color: var(--secondary);
+}
+
+.tiptap-editor blockquote p:last-child,
+.pub-content blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* Links */
+.tiptap-editor a,
+.pub-content a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--border);
+  text-underline-offset: 4px;
+  transition: text-decoration-color 150ms ease, color 150ms ease;
+  cursor: pointer;
+}
+
+.tiptap-editor a:hover,
+.pub-content a:hover {
+  text-decoration-color: var(--primary);
+  color: var(--primary);
+}
+
+/* Inline Code */
+.tiptap-editor code,
+.pub-content code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background-color: rgba(26, 24, 22, 0.07);
+  padding: 0.15em 0.35em;
+  border-radius: 2px;
+  color: var(--primary);
+}
+
+/* Code Blocks */
+.tiptap-editor pre,
+.pub-content pre {
+  background-color: #ECE5D8;
+  border: 1px solid var(--border);
+  padding: 1rem 1.25rem;
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-radius: 2px;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.55;
+  white-space: pre;
+  tab-size: 2;
+}
+
+.tiptap-editor pre code,
+.pub-content pre code {
+  background-color: transparent !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-size: inherit !important;
+  color: var(--primary) !important;
+}
+
+/* Horizontal Rule */
+.tiptap-editor hr,
+.pub-content hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 2rem 0;
+}

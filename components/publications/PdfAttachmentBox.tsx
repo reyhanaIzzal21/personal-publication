@@ -1,6 +1,7 @@
 interface PdfAttachmentProps {
   attachment: {
     url: string;
+    downloadUrl?: string;
     filename?: string;
     title?: string;
     pageCount?: number;
@@ -74,7 +75,7 @@ export function PdfAttachmentBox({ attachment }: PdfAttachmentProps) {
       <div className="flex items-center gap-2 shrink-0">
         {/* Download Button */}
         <a
-          href={attachment.url}
+          href={attachment.downloadUrl || attachment.url}
           download={attachment.filename || 'research-paper.pdf'}
           aria-label={`Download ${displayTitle}`}
           className="bg-[#2A2825] text-white no-underline hover:bg-[#1A1816] transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent flex items-center justify-center w-8 h-8 rounded-none"
