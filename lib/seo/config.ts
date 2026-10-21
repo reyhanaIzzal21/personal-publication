@@ -9,7 +9,7 @@ export const SITE_CONFIG = {
   description:
     'An editorial personal publication by Reyhana Izzal featuring essays, research, hypotheses, and analysis on technology, AI, economics, and society.',
   locale: 'en_US',
-  defaultDomain: 'https://reyhanizzal.vercel.app',
+  defaultDomain: 'https://reyhanaizzal.vercel.app',
 };
 
 /**
