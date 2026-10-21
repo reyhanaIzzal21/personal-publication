@@ -54,7 +54,7 @@ export default async function Home() {
           Reyhana Izzal is a Software Engineer and the Founder of Neurifly, a Hybrid SaaS platform providing customized, scalable digital ecosystems for the education and tutoring sector.
         </p>
         <p>
-          Previously, he worked as a Full Stack and Backend Developer at PT Humma Teknologi Indonesia, focusing on enterprise system architecture, REST API design, and business process automation. He has also mentored emerging engineering talent and served as an industry assessor for software development competencies.
+          Previously, he interned  as a Full Stack and Backend Developer at PT Humma Teknologi Indonesia, focusing on enterprise system architecture, REST API design. He has also mentored emerging engineering talent and served as an industry assessor for software development competencies.
         </p>
         <p>
           Driven by an early intersection between economics and technology, Reyhana actively writes and publishes data-driven research, market analyses, and essays covering macroeconomics, financial systems, AI developments, and political economy.
