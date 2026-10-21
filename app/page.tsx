@@ -51,22 +51,16 @@ export default async function Home() {
       {/* Intro / Profile Biography */}
       <section className="space-y-4 mb-12 sm:mb-14 text-[16px] sm:text-[20px] leading-[1.65] text-text font-serif">
         <p>
-          Dario Amodei is the CEO of{' '}
-          <a
-            href="https://www.anthropic.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline decoration-border hover:decoration-primary underline-offset-4 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
-          >
-            Anthropic
-          </a>
-          , a public benefit corporation dedicated to building AI systems that are steerable, interpretable and safe.
+          Reyhana Izzal is a Software Engineer and the Founder of Neurifly, a Hybrid SaaS platform providing customized, scalable digital ecosystems for the education and tutoring sector.
         </p>
         <p>
-          Previously, Dario served as Vice President of Research at OpenAI, where he led the development of large language models like GPT-2 and GPT-3. He is also the co-inventor of reinforcement learning from human feedback. Before joining OpenAI, he worked at Google Brain as a Senior Research Scientist.
+          Previously, he worked as a Full Stack and Backend Developer at PT Humma Teknologi Indonesia, focusing on enterprise system architecture, REST API design, and business process automation. He has also mentored emerging engineering talent and served as an industry assessor for software development competencies.
         </p>
         <p>
-          Dario earned his doctorate degree in biophysics from Princeton University as a Hertz Fellow, and was a postdoctoral scholar at the Stanford University School of Medicine.
+          Driven by an early intersection between economics and technology, Reyhana actively writes and publishes data-driven research, market analyses, and essays covering macroeconomics, financial systems, AI developments, and political economy.
+        </p>
+        <p>
+          He was awarded 1st Place at the 2026 LKS Web Technologies competition (Regency level) and earned a Medallion for Excellence at the Provincial level.
         </p>
       </section>
 
